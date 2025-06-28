@@ -16,7 +16,7 @@ from database import (
 )
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "sua-chave-secreta-aqui-mude-em-producao"
+app.config["SECRET_KEY"] = "minha-chave-ultra-secreta"
 
 # Inicializar banco de dados
 init_db()
@@ -119,8 +119,17 @@ def consultar_horarios():
                 if len(next_trains) >= 3:  # Mostrar apenas os próximos 3 trens
                     break
 
+        # Criar um novo formulário para a página de resultados
+        new_form = StationForm()
+        new_form.station.data = station
+        new_form.direction.data = direction
+
         return render_template(
-            "results.html", station=station, direction=direction, trains=next_trains
+            "results.html",
+            station=station,
+            direction=direction,
+            trains=next_trains,
+            form=new_form,
         )
 
     return redirect(url_for("index"))

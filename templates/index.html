@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
-                    <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                    <i class="fas fa-search fa-3x mb-3" style="color: var(--primary-color);"></i>
                     <h2>Consultar Horários do Metrô</h2>
                     <p class="text-muted">Selecione a estação e direção para ver os próximos trens</p>
                 </div>
@@ -23,6 +23,13 @@
                             {{ form.direction.label(class="form-label") }}
                             {{ form.direction(class="form-select form-select-lg") }}
                         </div>
+                        <div class="form-text">
+                            <small>
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Ida:</strong> Fortaleza → Maracanaú | 
+                                <strong>Volta:</strong> Maracanaú → Fortaleza
+                            </small>
+                        </div>
                     </div>
                     
                     <div class="text-center">
@@ -37,7 +44,7 @@
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                        <i class="fas fa-clock fa-2x mb-2" style="color: var(--primary-color);"></i>
                         <h5>Horários Atualizados</h5>
                         <p class="text-muted">Previsões baseadas em IA</p>
                     </div>
@@ -46,7 +53,7 @@
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                        <i class="fas fa-users fa-2x mb-2" style="color: #059669;"></i>
                         <h5>Dados da Comunidade</h5>
                         <p class="text-muted">Atualizações em tempo real</p>
                     </div>
@@ -55,7 +62,7 @@
             <div class="col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <i class="fas fa-mobile-alt fa-2x text-warning mb-2"></i>
+                        <i class="fas fa-mobile-alt fa-2x mb-2" style="color: #dc2626;"></i>
                         <h5>Acesso Mobile</h5>
                         <p class="text-muted">Responsivo e rápido</p>
                     </div>
@@ -75,7 +82,25 @@
                     <li><strong>Clique em Consultar</strong> para ver os próximos trens</li>
                     <li><strong>Ajude a comunidade</strong> reportando horários reais de chegada</li>
                 </ol>
-                <div class="alert alert-info">
+                
+                <!-- Explicação das direções -->
+                <div class="alert" style="background-color: var(--bg-secondary); border-color: var(--border-color); margin-bottom: 1rem;">
+                    <h6><i class="fas fa-route"></i> Entenda as direções:</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong style="color: var(--primary-color);">📍 IDA</strong><br>
+                            <small>De Fortaleza para Maracanaú</small><br>
+                            <small class="text-muted">Sentido: Centro → Periferia</small>
+                        </div>
+                        <div class="col-md-6">
+                            <strong style="color: #059669;">📍 VOLTA</strong><br>
+                            <small>De Maracanaú para Fortaleza</small><br>
+                            <small class="text-muted">Sentido: Periferia → Centro</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert" style="background-color: var(--bg-secondary); border-color: var(--border-color);">
                     <i class="fas fa-lightbulb"></i>
                     <strong>Dica:</strong> Quanto mais pessoas reportarem horários reais, mais precisas ficam as previsões!
                 </div>

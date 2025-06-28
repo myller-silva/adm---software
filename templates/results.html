@@ -7,7 +7,46 @@
             <div class="card-header text-center">
                 <h2><i class="fas fa-subway"></i> {{ station }} - {{ direction.title() }}</h2>
                 <p class="mb-0">Próximos trens previstos</p>
+                <small class="text-muted">
+                    {% if direction.lower() == 'ida' %}
+                        <i class="fas fa-arrow-right"></i> Sentido: Fortaleza → Maracanaú
+                    {% else %}
+                        <i class="fas fa-arrow-left"></i> Sentido: Maracanaú → Fortaleza
+                    {% endif %}
+                </small>
             </div>
+            
+            <!-- Formulário para alterar consulta -->
+            <div class="card-body border-top" style="background-color: var(--bg-secondary);">
+                <div class="row align-items-end">
+                    <div class="col-md-4">
+                        <form method="POST" action="{{ url_for('consultar_horarios') }}" class="d-flex gap-2 align-items-end">
+                            {{ form.hidden_tag() }}
+                            <div class="flex-grow-1">
+                                {{ form.station.label(class="form-label small mb-1") }}
+                                {{ form.station(class="form-select form-select-sm") }}
+                            </div>
+                    </div>
+                    <div class="col-md-3">
+                            <div class="flex-grow-1">
+                                {{ form.direction.label(class="form-label small mb-1") }}
+                                {{ form.direction(class="form-select form-select-sm") }}
+                            </div>
+                    </div>
+                    <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-sync-alt"></i> Atualizar
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> Altere a consulta sem sair da página
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
             <div class="card-body">
                 {% if trains %}
                     <div class="row">
@@ -19,7 +58,7 @@
                                         <h4>{{ train.predicted }}</h4>
                                         <div class="delay-badge">
                                             {% if train.delay > 0 %}
-                                                <i class="fas fa-clock"></i> +{{ train.delay }} min
+                                                <i class="fas fa-clock" style="color: #dc2626;"></i> +{{ train.delay }} min
                                             {% elif train.delay == 0 %}
                                                 <i class="fas fa-check"></i> No horário
                                             {% else %}
@@ -38,17 +77,17 @@
                     <!-- Legenda -->
                     <div class="row mt-4">
                         <div class="col-12">
-                            <div class="alert alert-info">
+                            <div class="alert" style="background-color: var(--bg-secondary); border-color: var(--border-color);">
                                 <h6><i class="fas fa-info-circle"></i> Legenda:</h6>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <i class="fas fa-check text-success"></i> <strong>No horário:</strong> Sem atraso
+                                        <i class="fas fa-check" style="color: #059669;"></i> <strong>No horário:</strong> Sem atraso
                                     </div>
                                     <div class="col-md-4">
-                                        <i class="fas fa-clock text-warning"></i> <strong>Atrasado:</strong> Atraso previsto
+                                        <i class="fas fa-clock" style="color: #dc2626;"></i> <strong>Atrasado:</strong> Atraso previsto
                                     </div>
                                     <div class="col-md-4">
-                                        <i class="fas fa-tachometer-alt text-primary"></i> <strong>Adiantado:</strong> Chegada antecipada
+                                        <i class="fas fa-tachometer-alt" style="color: var(--primary-color);"></i> <strong>Adiantado:</strong> Chegada antecipada
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +105,7 @@
                 <div class="row mt-4">
                     <div class="col-md-6">
                         <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg w-100">
-                            <i class="fas fa-arrow-left"></i> Nova Consulta
+                            <i class="fas fa-arrow-left"></i> Tela Inicial
                         </a>
                     </div>
                     <div class="col-md-6">
@@ -87,16 +126,16 @@
                 <div class="row">
                     <div class="col-md-6">
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-check text-success"></i> Chegue na estação 5 minutos antes</li>
-                            <li><i class="fas fa-check text-success"></i> Tenha seu cartão do metrô em mãos</li>
-                            <li><i class="fas fa-check text-success"></i> Respeite a fila de embarque</li>
+                            <li><i class="fas fa-check" style="color: #059669;"></i> Chegue na estação 5 minutos antes</li>
+                            <li><i class="fas fa-check" style="color: #059669;"></i> Tenha seu cartão do metrô em mãos</li>
+                            <li><i class="fas fa-check" style="color: #059669;"></i> Respeite a fila de embarque</li>
                         </ul>
                     </div>
                     <div class="col-md-6">
                         <ul class="list-unstyled">
-                            <li><i class="fas fa-check text-success"></i> Dê preferência aos idosos e gestantes</li>
-                            <li><i class="fas fa-check text-success"></i> Mantenha a máscara durante a viagem</li>
-                            <li><i class="fas fa-check text-success"></i> Evite horários de pico se possível</li>
+                            <li><i class="fas fa-check" style="color: #059669;"></i> Dê preferência aos idosos e gestantes</li>
+                            <!-- <li><i class="fas fa-check" style="color: #059669;"></i> Mantenha a máscara durante a viagem</li> -->
+                            <li><i class="fas fa-check" style="color: #059669;"></i> Evite horários de pico se possível</li>
                         </ul>
                     </div>
                 </div>
@@ -104,14 +143,14 @@
         </div>
 
         <!-- Ajude a melhorar -->
-        <div class="alert alert-warning mt-4">
+        <div class="alert mt-4" style="background-color: #fef3c7; border-color: #f59e0b; color: #92400e;">
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h6><i class="fas fa-hands-helping"></i> Ajude a melhorar as previsões!</h6>
                     <p class="mb-0">Reporte o horário real de chegada do seu trem para ajudar outros usuários.</p>
                 </div>
                 <div class="col-md-4 text-end">
-                    <a href="{{ url_for('reportar') }}" class="btn btn-warning">
+                    <a href="{{ url_for('reportar') }}" class="btn" style="background-color: #f59e0b; color: white;">
                         <i class="fas fa-clock"></i> Reportar Agora
                     </a>
                 </div>

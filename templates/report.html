@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
-                    <i class="fas fa-clock fa-3x text-success mb-3"></i>
+                    <i class="fas fa-clock fa-3x mb-3" style="color: #059669;"></i>
                     <h2>Reportar Horário Real</h2>
                     <p class="text-muted">Ajude a comunidade com informações precisas</p>
                 </div>
@@ -22,6 +22,13 @@
                         <div class="col-md-6 mb-3">
                             {{ form.direction.label(class="form-label") }}
                             {{ form.direction(class="form-select form-select-lg") }}
+                            <div class="form-text">
+                                <small>
+                                    <i class="fas fa-info-circle"></i>
+                                    <strong>Ida:</strong> Fortaleza → Maracanaú | 
+                                    <strong>Volta:</strong> Maracanaú → Fortaleza
+                                </small>
+                            </div>
                         </div>
                     </div>
                     
@@ -49,7 +56,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <h6 class="text-success"><i class="fas fa-check"></i> Faça assim:</h6>
+                        <h6 style="color: #059669;"><i class="fas fa-check"></i> Faça assim:</h6>
                         <ul>
                             <li>Reporte apenas quando o trem efetivamente chegar</li>
                             <li>Use o horário exato da chegada</li>
@@ -58,7 +65,7 @@
                         </ul>
                     </div>
                     <div class="col-md-6">
-                        <h6 class="text-danger"><i class="fas fa-times"></i> Evite:</h6>
+                        <h6 style="color: #dc2626;"><i class="fas fa-times"></i> Evite:</h6>
                         <ul>
                             <li>Reportar horários estimados</li>
                             <li>Informar chegadas muito antigas</li>
@@ -72,23 +79,23 @@
 
         <!-- Por que reportar -->
         <div class="card mt-4">
-            <div class="card-header bg-info text-white">
+            <div class="card-header" style="background-color: var(--primary-color); color: white;">
                 <h5><i class="fas fa-heart"></i> Por que seus dados são importantes?</h5>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 text-center">
-                        <i class="fas fa-brain fa-2x text-primary mb-2"></i>
+                        <i class="fas fa-brain fa-2x mb-2" style="color: var(--primary-color);"></i>
                         <h6>Inteligência Artificial</h6>
                         <p class="text-muted">Nosso sistema aprende com seus dados para fazer previsões mais precisas</p>
                     </div>
                     <div class="col-md-4 text-center">
-                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                        <i class="fas fa-users fa-2x mb-2" style="color: #059669;"></i>
                         <h6>Comunidade</h6>
                         <p class="text-muted">Você ajuda milhares de usuários a planejarem melhor suas viagens</p>
                     </div>
                     <div class="col-md-4 text-center">
-                        <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                        <i class="fas fa-chart-line fa-2x mb-2" style="color: #dc2626;"></i>
                         <h6>Melhoria Contínua</h6>
                         <p class="text-muted">Quanto mais dados, melhor o serviço para todos</p>
                     </div>
@@ -101,19 +108,19 @@
             <div class="card-body">
                 <div class="row text-center">
                     <div class="col-md-3">
-                        <h3 class="text-primary">1,234</h3>
+                        <h3 style="color: var(--primary-color);">1,234</h3>
                         <p class="text-muted">Reportes este mês</p>
                     </div>
                     <div class="col-md-3">
-                        <h3 class="text-success">89%</h3>
+                        <h3 style="color: #059669;">89%</h3>
                         <p class="text-muted">Precisão das previsões</p>
                     </div>
                     <div class="col-md-3">
-                        <h3 class="text-warning">567</h3>
+                        <h3 style="color: #dc2626;">567</h3>
                         <p class="text-muted">Usuários ativos</p>
                     </div>
                     <div class="col-md-3">
-                        <h3 class="text-info">2.1min</h3>
+                        <h3 style="color: #7c3aed;">2.1min</h3>
                         <p class="text-muted">Atraso médio</p>
                     </div>
                 </div>

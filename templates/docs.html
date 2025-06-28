@@ -17,7 +17,7 @@
                     <h3>Introdução</h3>
                     <p>Esta API permite consultar horários do metrô e enviar atualizações em tempo real. Todos os endpoints retornam dados em formato JSON.</p>
                     
-                    <div class="alert alert-info">
+                    <div class="alert" style="background-color: var(--bg-secondary); border-color: var(--border-color);">
                         <h6><i class="fas fa-globe"></i> URL Base</h6>
                         <code>http://localhost:5000/api</code>
                     </div>
@@ -29,7 +29,7 @@
                     
                     <!-- GET Horários -->
                     <div class="card mb-4">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header" style="background-color: var(--primary-color); color: white;">
                             <h5><span class="badge bg-light text-dark">GET</span> /api/horarios/{station}/{direction}</h5>
                         </div>
                         <div class="card-body">
@@ -67,7 +67,7 @@
 
                     <!-- POST Report -->
                     <div class="card mb-4">
-                        <div class="card-header bg-success text-white">
+                        <div class="card-header" style="background-color: #059669; color: white;">
                             <h5><span class="badge bg-light text-dark">POST</span> /api/report</h5>
                         </div>
                         <div class="card-body">
@@ -153,17 +153,17 @@ Content-Type: application/json
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><span class="badge bg-success">200</span></td>
+                                    <td><span class="badge" style="background-color: #059669; color: white;">200</span></td>
                                     <td>Sucesso</td>
                                     <td>Dados retornados com sucesso</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="badge bg-danger">400</span></td>
+                                    <td><span class="badge" style="background-color: #dc2626; color: white;">400</span></td>
                                     <td>Erro na requisição</td>
                                     <td>Parâmetros inválidos ou dados incompletos</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="badge bg-warning">404</span></td>
+                                    <td><span class="badge" style="background-color: #f59e0b; color: white;">404</span></td>
                                     <td>Não encontrado</td>
                                     <td>Estação não existe</td>
                                 </tr>
