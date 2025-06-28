@@ -277,7 +277,64 @@
             } else {
                 themeIcon.className = 'fas fa-moon';
             }
+
+            // Load saved station and direction preferences
+            loadUserPreferences();
+            
+            // Add event listeners for preference saving
+            addPreferenceListeners();
         });
+
+        // Save user preferences to localStorage
+        function saveUserPreferences() {
+            const stationSelect = document.getElementById('station');
+            const directionSelect = document.getElementById('direction');
+            
+            if (stationSelect && directionSelect) {
+                const preferences = {
+                    station: stationSelect.value,
+                    direction: directionSelect.value
+                };
+                localStorage.setItem('metroPreferences', JSON.stringify(preferences));
+            }
+        }
+
+        // Load user preferences from localStorage
+        function loadUserPreferences() {
+            const savedPreferences = localStorage.getItem('metroPreferences');
+            
+            if (savedPreferences) {
+                try {
+                    const preferences = JSON.parse(savedPreferences);
+                    const stationSelect = document.getElementById('station');
+                    const directionSelect = document.getElementById('direction');
+                    
+                    if (stationSelect && preferences.station) {
+                        stationSelect.value = preferences.station;
+                    }
+                    
+                    if (directionSelect && preferences.direction) {
+                        directionSelect.value = preferences.direction;
+                    }
+                } catch (e) {
+                    console.log('Erro ao carregar preferências salvas:', e);
+                }
+            }
+        }
+
+        // Add event listeners to save preferences when user changes selection
+        function addPreferenceListeners() {
+            const stationSelect = document.getElementById('station');
+            const directionSelect = document.getElementById('direction');
+            
+            if (stationSelect) {
+                stationSelect.addEventListener('change', saveUserPreferences);
+            }
+            
+            if (directionSelect) {
+                directionSelect.addEventListener('change', saveUserPreferences);
+            }
+        }
     </script>
     {% block scripts %}{% endblock %}
 </body>

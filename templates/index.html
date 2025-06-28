@@ -17,11 +17,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             {{ form.station.label(class="form-label") }}
-                            {{ form.station(class="form-select form-select-lg") }}
+                            {{ form.station(class="form-select form-select-lg", id="station") }}
                         </div>
                         <div class="col-md-6 mb-3">
                             {{ form.direction.label(class="form-label") }}
-                            {{ form.direction(class="form-select form-select-lg") }}
+                            {{ form.direction(class="form-select form-select-lg", id="direction") }}
                         </div>
                         <div class="form-text">
                             <small class="d-flex align-items-start">
@@ -108,4 +108,10 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // No additional scripts needed - preferences handled in base template
+</script>
 {% endblock %}

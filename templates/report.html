@@ -7,7 +7,7 @@
             <div class="card-body p-5">
                 <div class="text-center mb-4">
                     <i class="fas fa-clock fa-3x mb-3" style="color: #059669;"></i>
-                    <h2>Reportar Horário Real</h2>
+                    <h2> Real</h2>
                     <p class="text-muted">Ajude a comunidade com informações precisas</p>
                 </div>
 
@@ -17,11 +17,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             {{ form.station.label(class="form-label") }}
-                            {{ form.station(class="form-select form-select-lg") }}
+                            {{ form.station(class="form-select form-select-lg", id="station") }}
                         </div>
                         <div class="col-md-6 mb-3">
                             {{ form.direction.label(class="form-label") }}
-                            {{ form.direction(class="form-select form-select-lg") }}
+                            {{ form.direction(class="form-select form-select-lg", id="direction") }}
                             <div class="form-text">
                                 <small>
                                     <i class="fas fa-info-circle"></i>
@@ -34,10 +34,15 @@
                     
                     <div class="mb-4">
                         {{ form.actual_time.label(class="form-label") }}
-                        {{ form.actual_time(class="form-control form-control-lg") }}
+                        <input type="time" 
+                            class="form-control form-control-lg" 
+                            id="time-only-input" 
+                            required>
+                        <!-- Campo hidden original para compatibilidade -->
+                        {{ form.actual_time(style="display: none;") }}
                         <div class="form-text">
                             <i class="fas fa-info-circle"></i> 
-                            Informe o horário exato que o trem chegou na estação
+                            Selecione apenas a hora e minuto (data será de hoje)
                         </div>
                     </div>
                     
@@ -103,7 +108,7 @@
             </div>
         </div>
 
-        <!-- Estatísticas -->
+        <!-- Estatísticas(Mockado) -->
         <div class="card mt-4">
             <div class="card-body">
                 <div class="row text-center">
@@ -130,7 +135,6 @@
 </div>
 
 <script>
-// Definir horário atual como padrão
 document.addEventListener('DOMContentLoaded', function() {
     var now = new Date();
     var year = now.getFullYear();
@@ -139,8 +143,27 @@ document.addEventListener('DOMContentLoaded', function() {
     var hours = String(now.getHours()).padStart(2, '0');
     var minutes = String(now.getMinutes()).padStart(2, '0');
     
-    var currentDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
-    document.getElementById('actual_time').value = currentDateTime;
+    var timeOnlyInput = document.getElementById('time-only-input');
+    var actualTimeInput = document.getElementById('actual_time');
+    
+    // Definir horário atual no input de time
+    timeOnlyInput.value = hours + ':' + minutes;
+    
+    // Função para atualizar o campo original
+    function updateActualTime() {
+        var timeValue = timeOnlyInput.value;
+        if (timeValue) {
+            var currentDateTime = year + '-' + month + '-' + day + 'T' + timeValue;
+            actualTimeInput.value = currentDateTime;
+        }
+    }
+    
+    // Atualizar quando o time input mudar
+    timeOnlyInput.addEventListener('change', updateActualTime);
+    timeOnlyInput.addEventListener('input', updateActualTime);
+    
+    // Definir valor inicial
+    updateActualTime();
 });
 </script>
 {% endblock %}
