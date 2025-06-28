@@ -7,6 +7,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 import os
+import pytz
 from ml_model import MetroPredictor
 from database import (
     init_db,
@@ -17,6 +18,14 @@ from database import (
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "minha-chave-ultra-secreta"
+
+# Configuração do fuso horário de Fortaleza
+REGION_TIME_ZONE = pytz.timezone("America/Fortaleza")
+
+def get_region_time():
+    """Retorna a hora atual no fuso horário da região"""
+    return datetime.now(REGION_TIME_ZONE)
+
 
 # Inicializar banco de dados
 init_db()
@@ -93,7 +102,7 @@ def consultar_horarios():
         scheduled_times = get_scheduled_times(station, direction)
 
         # Obter próximos horários
-        current_time = datetime.now().time()
+        current_time = get_region_time().time()
         next_trains = []
 
         for time_str in scheduled_times:
@@ -101,7 +110,7 @@ def consultar_horarios():
             if train_time > current_time:
                 # Prever tempo real usando ML
                 predicted_time = predictor.predict_arrival_time(
-                    station, direction, time_str, datetime.now()
+                    station, direction, time_str, get_region_time()
                 )
                 next_trains.append(
                     {
@@ -110,7 +119,7 @@ def consultar_horarios():
                         "delay": int(
                             (
                                 predicted_time
-                                - datetime.combine(datetime.today(), train_time)
+                                - datetime.combine(get_region_time().date(), train_time)
                             ).total_seconds()
                             / 60
                         ),
@@ -166,14 +175,14 @@ def api_horarios(station, direction):
     """API endpoint para consultar horários"""
     try:
         scheduled_times = get_scheduled_times(station, direction)
-        current_time = datetime.now().time()
+        current_time = get_region_time().time()
         next_trains = []
 
         for time_str in scheduled_times:
             train_time = datetime.strptime(time_str, "%H:%M").time()
             if train_time > current_time:
                 predicted_time = predictor.predict_arrival_time(
-                    station, direction, time_str, datetime.now()
+                    station, direction, time_str, get_region_time()
                 )
                 next_trains.append(
                     {
@@ -182,7 +191,7 @@ def api_horarios(station, direction):
                         "delay_minutes": int(
                             (
                                 predicted_time
-                                - datetime.combine(datetime.today(), train_time)
+                                - datetime.combine(get_region_time().date(), train_time)
                             ).total_seconds()
                             / 60
                         ),
