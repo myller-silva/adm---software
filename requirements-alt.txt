@@ -1,0 +1,24 @@
+# Versão alternativa com versões mais recentes e compatíveis
+flask==3.0.0
+werkzeug==3.0.1
+pandas==2.1.4
+numpy==1.26.2
+scikit-learn==1.3.2
+wtforms==3.1.1
+flask-wtf==1.2.1
+markupsafe==2.1.3
+
+# Sistema de Previsão do Metrô - Random Forest Model  
+prophet==1.1.5
+
+# Dependências para banco de dados
+# sqlite3 já incluído no Python padrão
+
+# Dependências para desenvolvimento
+requests==2.31.0
+python-dotenv==1.0.0
+
+# Dependências adicionais para compatibilidade
+jinja2==3.1.2
+itsdangerous==2.1.2
+click==8.1.7

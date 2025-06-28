@@ -1,20 +1,19 @@
-# Dependências principais
+# Dependências principais - versões compatíveis
 flask==2.3.3
+werkzeug==2.3.7
 pandas==2.0.3
 numpy==1.24.3
 scikit-learn==1.3.0
 wtforms==3.0.1
-flask-wtf==1.1.1
+flask-wtf==1.2.1
 markupsafe==2.1.3
 
 # Sistema de Previsão do Metrô - Random Forest Model  
-prophet
-numpy
-scikit-learn
+prophet==1.1.4
 
 # Dependências para banco de dados
 # sqlite3 já incluído no Python padrão
 
 # Dependências para desenvolvimento
-requests
-python-dotenv
+requests==2.31.0
+python-dotenv==1.0.0

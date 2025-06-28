@@ -40,6 +40,7 @@ venv.bak/
 
 # Logs
 *.log
+logs/
 
 # Arquivos temporários
 tmp/
@@ -55,12 +56,10 @@ Thumbs.db
 .gitignore
 
 # Docker
-Dockerfile
 .dockerignore
 docker-compose.yml
 
 # Documentação
-README.md
 *.md
 
 # Arquivos de configuração locais
@@ -68,3 +67,7 @@ README.md
 .env.development
 .env.test
 config.local.py
+
+# Banco de dados local (será criado no container)
+*.db
+data/
