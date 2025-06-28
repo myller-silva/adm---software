@@ -9,8 +9,8 @@
 # Pickle files
 **/*.pkl
 
-# Data files
-**/*.csv
+# # Data files
+# **/*.csv
 
 # Database files
 **/*.db
