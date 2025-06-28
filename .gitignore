@@ -1,0 +1,17 @@
+**/tmp
+**/__pycache__
+**/venv
+
+# Python bytecode and cache files
+**/*.pyc
+**/*.pyo
+
+# Pickle files
+**/*.pkl
+
+# Data files
+**/*.csv
+
+# Database files
+**/*.db
+

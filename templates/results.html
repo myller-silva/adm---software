@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2><i class="fas fa-subway"></i> {{ station }} - {{ direction.title() }}</h2>
+                <p class="mb-0">Próximos trens previstos</p>
+            </div>
+            <div class="card-body">
+                {% if trains %}
+                    <div class="row">
+                        {% for train in trains %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card train-card">
+                                    <div class="card-body text-center">
+                                        <h3><i class="fas fa-train"></i></h3>
+                                        <h4>{{ train.predicted }}</h4>
+                                        <div class="delay-badge">
+                                            {% if train.delay > 0 %}
+                                                <i class="fas fa-clock"></i> +{{ train.delay }} min
+                                            {% elif train.delay == 0 %}
+                                                <i class="fas fa-check"></i> No horário
+                                            {% else %}
+                                                <i class="fas fa-tachometer-alt"></i> {{ train.delay }} min
+                                            {% endif %}
+                                        </div>
+                                        <small class="d-block mt-2">
+                                            Programado: {{ train.scheduled }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Legenda -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> Legenda:</h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i class="fas fa-check text-success"></i> <strong>No horário:</strong> Sem atraso
+                                    </div>
+                                    <div class="col-md-4">
+                                        <i class="fas fa-clock text-warning"></i> <strong>Atrasado:</strong> Atraso previsto
+                                    </div>
+                                    <div class="col-md-4">
+                                        <i class="fas fa-tachometer-alt text-primary"></i> <strong>Adiantado:</strong> Chegada antecipada
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-moon fa-3x text-muted mb-3"></i>
+                        <h4>Não há mais trens hoje</h4>
+                        <p class="text-muted">O serviço já foi encerrado para hoje. Volte amanhã!</p>
+                    </div>
+                {% endif %}
+                
+                <!-- Ações -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg w-100">
+                            <i class="fas fa-arrow-left"></i> Nova Consulta
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('reportar') }}" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-plus"></i> Reportar Horário
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dicas para a viagem -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fas fa-lightbulb"></i> Dicas para sua viagem</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Chegue na estação 5 minutos antes</li>
+                            <li><i class="fas fa-check text-success"></i> Tenha seu cartão do metrô em mãos</li>
+                            <li><i class="fas fa-check text-success"></i> Respeite a fila de embarque</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Dê preferência aos idosos e gestantes</li>
+                            <li><i class="fas fa-check text-success"></i> Mantenha a máscara durante a viagem</li>
+                            <li><i class="fas fa-check text-success"></i> Evite horários de pico se possível</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ajude a melhorar -->
+        <div class="alert alert-warning mt-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h6><i class="fas fa-hands-helping"></i> Ajude a melhorar as previsões!</h6>
+                    <p class="mb-0">Reporte o horário real de chegada do seu trem para ajudar outros usuários.</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="{{ url_for('reportar') }}" class="btn btn-warning">
+                        <i class="fas fa-clock"></i> Reportar Agora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-refresh a cada 30 segundos
+setTimeout(function() {
+    location.reload();
+}, 30000);
+</script>
+{% endblock %}

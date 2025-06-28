@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                    <h2>Consultar Horários do Metrô</h2>
+                    <p class="text-muted">Selecione a estação e direção para ver os próximos trens</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('consultar_horarios') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.station.label(class="form-label") }}
+                            {{ form.station(class="form-select form-select-lg") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.direction.label(class="form-label") }}
+                            {{ form.direction(class="form-select form-select-lg") }}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Informações adicionais -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                        <h5>Horários Atualizados</h5>
+                        <p class="text-muted">Previsões baseadas em IA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                        <h5>Dados da Comunidade</h5>
+                        <p class="text-muted">Atualizações em tempo real</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-mobile-alt fa-2x text-warning mb-2"></i>
+                        <h5>Acesso Mobile</h5>
+                        <p class="text-muted">Responsivo e rápido</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instruções -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fas fa-question-circle"></i> Como usar</h5>
+            </div>
+            <div class="card-body">
+                <ol>
+                    <li><strong>Selecione a estação</strong> onde você está ou quer embarcar</li>
+                    <li><strong>Escolha a direção</strong> da sua viagem (Ida ou Volta)</li>
+                    <li><strong>Clique em Consultar</strong> para ver os próximos trens</li>
+                    <li><strong>Ajude a comunidade</strong> reportando horários reais de chegada</li>
+                </ol>
+                <div class="alert alert-info">
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>Dica:</strong> Quanto mais pessoas reportarem horários reais, mais precisas ficam as previsões!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

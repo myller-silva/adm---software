@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-clock fa-3x text-success mb-3"></i>
+                    <h2>Reportar Horário Real</h2>
+                    <p class="text-muted">Ajude a comunidade com informações precisas</p>
+                </div>
+
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.station.label(class="form-label") }}
+                            {{ form.station(class="form-select form-select-lg") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.direction.label(class="form-label") }}
+                            {{ form.direction(class="form-select form-select-lg") }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.actual_time.label(class="form-label") }}
+                        {{ form.actual_time(class="form-control form-control-lg") }}
+                        <div class="form-text">
+                            <i class="fas fa-info-circle"></i> 
+                            Informe o horário exato que o trem chegou na estação
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        {{ form.submit(class="btn btn-success btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Instruções -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fas fa-question-circle"></i> Como reportar corretamente</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-success"><i class="fas fa-check"></i> Faça assim:</h6>
+                        <ul>
+                            <li>Reporte apenas quando o trem efetivamente chegar</li>
+                            <li>Use o horário exato da chegada</li>
+                            <li>Selecione a estação correta</li>
+                            <li>Confirme a direção do trem</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-danger"><i class="fas fa-times"></i> Evite:</h6>
+                        <ul>
+                            <li>Reportar horários estimados</li>
+                            <li>Informar chegadas muito antigas</li>
+                            <li>Confundir a direção do trem</li>
+                            <li>Reportar a mesma chegada múltiplas vezes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Por que reportar -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h5><i class="fas fa-heart"></i> Por que seus dados são importantes?</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-brain fa-2x text-primary mb-2"></i>
+                        <h6>Inteligência Artificial</h6>
+                        <p class="text-muted">Nosso sistema aprende com seus dados para fazer previsões mais precisas</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-users fa-2x text-success mb-2"></i>
+                        <h6>Comunidade</h6>
+                        <p class="text-muted">Você ajuda milhares de usuários a planejarem melhor suas viagens</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                        <h6>Melhoria Contínua</h6>
+                        <p class="text-muted">Quanto mais dados, melhor o serviço para todos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <h3 class="text-primary">1,234</h3>
+                        <p class="text-muted">Reportes este mês</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-success">89%</h3>
+                        <p class="text-muted">Precisão das previsões</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-warning">567</h3>
+                        <p class="text-muted">Usuários ativos</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h3 class="text-info">2.1min</h3>
+                        <p class="text-muted">Atraso médio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Definir horário atual como padrão
+document.addEventListener('DOMContentLoaded', function() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = String(now.getMonth() + 1).padStart(2, '0');
+    var day = String(now.getDate()).padStart(2, '0');
+    var hours = String(now.getHours()).padStart(2, '0');
+    var minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    var currentDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+    document.getElementById('actual_time').value = currentDateTime;
+});
+</script>
+{% endblock %}

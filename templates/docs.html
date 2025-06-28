@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+
+{% block title %}Documentação da API - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-book"></i> Documentação da API</h2>
+                <p class="mb-0">Referência completa para integração com o sistema</p>
+            </div>
+            <div class="card-body">
+                
+                <!-- Introdução -->
+                <section class="mb-5">
+                    <h3>Introdução</h3>
+                    <p>Esta API permite consultar horários do metrô e enviar atualizações em tempo real. Todos os endpoints retornam dados em formato JSON.</p>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-globe"></i> URL Base</h6>
+                        <code>http://localhost:5000/api</code>
+                    </div>
+                </section>
+
+                <!-- Endpoints -->
+                <section class="mb-5">
+                    <h3>Endpoints Disponíveis</h3>
+                    
+                    <!-- GET Horários -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5><span class="badge bg-light text-dark">GET</span> /api/horarios/{station}/{direction}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Descrição:</strong> Consulta os próximos horários para uma estação específica</p>
+                            
+                            <h6>Parâmetros:</h6>
+                            <ul>
+                                <li><code>station</code> (string): Nome da estação</li>
+                                <li><code>direction</code> (string): Direção ('ida' ou 'volta')</li>
+                            </ul>
+                            
+                            <h6>Exemplo de Request:</h6>
+                            <pre><code>GET /api/horarios/Parangaba/ida</code></pre>
+                            
+                            <h6>Exemplo de Response:</h6>
+                            <pre><code>{
+  "status": "success",
+  "station": "Parangaba",
+  "direction": "ida",
+  "trains": [
+    {
+      "scheduled": "14:30",
+      "predicted": "14:33",
+      "delay_minutes": 3
+    },
+    {
+      "scheduled": "14:46",
+      "predicted": "14:47",
+      "delay_minutes": 1
+    }
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- POST Report -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5><span class="badge bg-light text-dark">POST</span> /api/report</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Descrição:</strong> Reporta um horário real de chegada</p>
+                            
+                            <h6>Headers:</h6>
+                            <ul>
+                                <li><code>Content-Type: application/json</code></li>
+                            </ul>
+                            
+                            <h6>Body:</h6>
+                            <ul>
+                                <li><code>station</code> (string): Nome da estação</li>
+                                <li><code>direction</code> (string): Direção ('ida' ou 'volta')</li>
+                                <li><code>actual_time</code> (string): Horário real no formato ISO 8601</li>
+                            </ul>
+                            
+                            <h6>Exemplo de Request:</h6>
+                            <pre><code>POST /api/report
+Content-Type: application/json
+
+{
+  "station": "Parangaba",
+  "direction": "ida",
+  "actual_time": "2025-06-28T14:33:00"
+}</code></pre>
+                            
+                            <h6>Exemplo de Response:</h6>
+                            <pre><code>{
+  "status": "success",
+  "message": "Horário reportado com sucesso"
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Estações -->
+                <section class="mb-5">
+                    <h3>Estações Disponíveis</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul>
+                                <li>Chico da Silva</li>
+                                <li>J.Alencar</li>
+                                <li>S.Benedito</li>
+                                <li>Benfica</li>
+                                <li>Pe.Cicero</li>
+                                <li>Porangabussu</li>
+                                <li>C.Fernandes</li>
+                                <li>J.kubitschek</li>
+                                <li>Parangaba</li>
+                                <li>V.Pery</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>M.Satiro</li>
+                                <li>Mondubim</li>
+                                <li>Esperanca</li>
+                                <li>Aracape</li>
+                                <li>A.Alegre</li>
+                                <li>R.Queiroz</li>
+                                <li>V.Tavora</li>
+                                <li>Maracanaú</li>
+                                <li>Jereissati</li>
+                                <li>C. Benevides</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Códigos de Erro -->
+                <section class="mb-5">
+                    <h3>Códigos de Resposta</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Descrição</th>
+                                    <th>Exemplo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-success">200</span></td>
+                                    <td>Sucesso</td>
+                                    <td>Dados retornados com sucesso</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">400</span></td>
+                                    <td>Erro na requisição</td>
+                                    <td>Parâmetros inválidos ou dados incompletos</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning">404</span></td>
+                                    <td>Não encontrado</td>
+                                    <td>Estação não existe</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-secondary">500</span></td>
+                                    <td>Erro interno</td>
+                                    <td>Erro no servidor</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Exemplos em diferentes linguagens -->
+                <section class="mb-5">
+                    <h3>Exemplos de Código</h3>
+                    
+                    <!-- JavaScript -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6><i class="fab fa-js"></i> JavaScript (Fetch API)</h6>
+                        </div>
+                        <div class="card-body">
+<pre><code>// Consultar horários
+fetch('/api/horarios/Parangaba/ida')
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+// Reportar horário
+fetch('/api/report', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    station: 'Parangaba',
+    direction: 'ida',
+    actual_time: new Date().toISOString()
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data));</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Python -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6><i class="fab fa-python"></i> Python (requests)</h6>
+                        </div>
+                        <div class="card-body">
+<pre><code>import requests
+from datetime import datetime
+
+# Consultar horários
+response = requests.get('http://localhost:5000/api/horarios/Parangaba/ida')
+data = response.json()
+print(data)
+
+# Reportar horário
+payload = {
+    'station': 'Parangaba',
+    'direction': 'ida',
+    'actual_time': datetime.now().isoformat()
+}
+response = requests.post('http://localhost:5000/api/report', json=payload)
+print(response.json())</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- cURL -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6><i class="fas fa-terminal"></i> cURL</h6>
+                        </div>
+                        <div class="card-body">
+<pre><code># Consultar horários
+curl -X GET "http://localhost:5000/api/horarios/Parangaba/ida"
+
+# Reportar horário
+curl -X POST "http://localhost:5000/api/report" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "station": "Parangaba",
+    "direction": "ida",
+    "actual_time": "2025-06-28T14:33:00"
+  }'</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Limites e considerações -->
+                <section class="mb-5">
+                    <h3>Considerações Importantes</h3>
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Limites de Uso</h6>
+                        <ul class="mb-0">
+                            <li>Máximo de 100 requisições por minuto por IP</li>
+                            <li>Reports de horários devem ser de no máximo 1 hora atrás</li>
+                            <li>Nomes de estações são case-sensitive</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-shield-alt"></i> Segurança</h6>
+                        <ul class="mb-0">
+                            <li>Todas as entradas são validadas contra injeção SQL</li>
+                            <li>XSS protection ativo</li>
+                            <li>Rate limiting implementado</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Testes -->
+                <section>
+                    <h3>Testar a API</h3>
+                    <p>Use as ferramentas abaixo para testar os endpoints:</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="/api/horarios/Parangaba/ida" target="_blank" class="btn btn-primary btn-lg w-100 mb-2">
+                                <i class="fas fa-external-link-alt"></i> Testar GET Horários
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success btn-lg w-100 mb-2" onclick="testPostAPI()">
+                                <i class="fas fa-play"></i> Testar POST Report
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function testPostAPI() {
+    const payload = {
+        station: 'Parangaba',
+        direction: 'ida',
+        actual_time: new Date().toISOString()
+    };
+    
+    fetch('/api/report', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Teste realizado! Resposta: ' + JSON.stringify(data, null, 2));
+    })
+    .catch(error => {
+        alert('Erro no teste: ' + error);
+    });
+}
+</script>
+{% endblock %}
