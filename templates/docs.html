@@ -102,6 +102,55 @@ Content-Type: application/json
 }</code></pre>
                         </div>
                     </div>
+
+                    <!-- GET Alertas -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5><span class="badge bg-light text-dark">GET</span> /api/alertas</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Descrição:</strong> Obter todos os alertas atuais da Metrofor</p>
+                            
+                            <h6>Parâmetros:</h6>
+                            <ul>
+                                <li>Nenhum parâmetro necessário</li>
+                            </ul>
+                            
+                            <h6>Exemplo de Request:</h6>
+                            <pre><code>GET /api/alertas</code></pre>
+                            
+                            <h6>Exemplo de Response:</h6>
+                            <pre><code>{
+  "status": "success",
+  "alerts": [
+    {
+      "id": 1,
+      "type": "warning",
+      "title": "Atraso na Linha",
+      "message": "Atraso de aproximadamente 5-8 minutos devido a problema técnico.",
+      "stations": ["Parangaba", "J.kubitschek"],
+      "priority": "high",
+      "active": true,
+      "timestamp": "2025-07-08T14:30:00"
+    }
+  ],
+  "total": 1,
+  "timestamp": "2025-07-08T14:35:00"
+}</code></pre>
+                            
+                            <h6>Campos do Response:</h6>
+                            <ul>
+                                <li><code>id</code> (number): ID único do alerta</li>
+                                <li><code>type</code> (string): Tipo do alerta ('danger', 'warning', 'info')</li>
+                                <li><code>title</code> (string): Título do alerta</li>
+                                <li><code>message</code> (string): Mensagem detalhada</li>
+                                <li><code>stations</code> (array): Lista de estações afetadas (null se for geral)</li>
+                                <li><code>priority</code> (string): Prioridade ('high', 'medium', 'low')</li>
+                                <li><code>active</code> (boolean): Se o alerta está ativo</li>
+                                <li><code>timestamp</code> (string): Data/hora do alerta em ISO 8601</li>
+                            </ul>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Estações -->
@@ -205,7 +254,12 @@ fetch('/api/report', {
   })
 })
 .then(response => response.json())
-.then(data => console.log(data));</code></pre>
+.then(data => console.log(data));
+
+// Obter alertas
+fetch('/api/alertas')
+  .then(response => response.json())
+  .then(data => console.log(data));</code></pre>
                         </div>
                     </div>
 
@@ -230,7 +284,12 @@ payload = {
     'actual_time': datetime.now().isoformat()
 }
 response = requests.post('http://localhost:5000/api/report', json=payload)
-print(response.json())</code></pre>
+print(response.json())
+
+# Obter alertas
+response = requests.get('http://localhost:5000/api/alertas')
+data = response.json()
+print(data)</code></pre>
                         </div>
                     </div>
 
@@ -250,7 +309,10 @@ curl -X POST "http://localhost:5000/api/report" \
     "station": "Parangaba",
     "direction": "ida",
     "actual_time": "2025-06-28T14:33:00"
-  }'</code></pre>
+  }'
+
+# Obter alertas
+curl -X GET "http://localhost:5000/api/alertas"</code></pre>
                         </div>
                     </div>
                 </section>

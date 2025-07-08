@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from datetime import datetime, timedelta
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -7,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import pickle
 import os
 from database import get_real_time_updates, get_delay_statistics
+from config import METRO_MODEL_PKL, SCALER_PKL, ENCODERS_PKL, STATIONS
 
 
 class MetroPredictor:
@@ -16,35 +16,15 @@ class MetroPredictor:
         self.station_encoder = LabelEncoder()
         self.direction_encoder = LabelEncoder()
         self.is_trained = False
-        self.model_path = "metro_model.pkl"
-        self.scaler_path = "scaler.pkl"
-        self.encoders_path = "encoders.pkl"
+        # Usar configuração centralizada
+        self.model_path = METRO_MODEL_PKL
+        self.scaler_path = SCALER_PKL
+        self.encoders_path = ENCODERS_PKL
 
-        # Lista de estações para o encoder
-        self.stations = [
-            "Chico da Silva",
-            "J.Alencar",
-            "S.Benedito",
-            "Benfica",
-            "Pe.Cicero",
-            "Porangabussu",
-            "C.Fernandes",
-            "J.kubitschek",
-            "Parangaba",
-            "V.Pery",
-            "M.Satiro",
-            "Mondubim",
-            "Esperanca",
-            "Aracape",
-            "A.Alegre",
-            "R.Queiroz",
-            "V.Tavora",
-            "Maracanaú",
-            "Jereissati",
-            "C. Benevides",
-        ]
+        # Lista de estações da configuração
+        self.stations = STATIONS
 
-        self.directions = ["ida", "volta"]
+        self.directions = ["Carlito Benevides", "Chico da Silva"]
 
         # Inicializar encoders
         self.station_encoder.fit(self.stations)

@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header text-center">
                 <h2><i class="fas fa-subway"></i> {{ station }} - 
-                    {% if direction.lower() == 'ida' %}
+                    {% if direction == 'ida' %}
                         Carlito Benevides
                     {% else %}
                         Chico da Silva
@@ -14,7 +14,7 @@
                 </h2>
                 <p class="mb-0">Próximos trens previstos</p>
                 <small class="text-muted">
-                    {% if direction.lower() == 'ida' %}
+                    {% if direction == 'ida' %}
                         <i class="fas fa-arrow-right"></i> Sentido: Fortaleza → Maracanaú
                     {% else %}
                         <i class="fas fa-arrow-left"></i> Sentido: Maracanaú → Fortaleza
@@ -26,7 +26,7 @@
             <div class="card-body border-top" style="background-color: var(--bg-secondary);">
                 <div class="row align-items-end">
                     <div class="col-md-4">
-                        <form method="POST" action="{{ url_for('consultar_horarios') }}" class="d-flex gap-2 align-items-end">
+                        <form method="POST" action="{{ url_for('main.consultar_horarios') }}" class="d-flex gap-2 align-items-end">
                             {{ form.hidden_tag() }}
                             <div class="flex-grow-1">
                                 {{ form.station.label(class="form-label small mb-1") }}
@@ -110,12 +110,12 @@
                 <!-- Ações -->
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg w-100">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary btn-lg w-100">
                             <i class="fas fa-arrow-left"></i> Tela Inicial
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ url_for('reportar') }}" class="btn btn-success btn-lg w-100">
+                        <a href="{{ url_for('main.reportar') }}" class="btn btn-success btn-lg w-100">
                             <i class="fas fa-plus"></i> Reportar Horário
                         </a>
                     </div>
@@ -149,13 +149,73 @@
                     <p class="mb-0">Reporte o horário real de chegada do seu trem para ajudar outros usuários.</p>
                 </div>
                 <div class="col-md-4 text-end">
-                    <a href="{{ url_for('reportar') }}" class="btn" style="background-color: #f59e0b; color: white;">
+                    <a href="{{ url_for('main.reportar') }}" class="btn" style="background-color: #f59e0b; color: white;">
                         <i class="fas fa-clock"></i> Reportar Agora
                     </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Alertas relevantes para esta estação -->
+{% if alerts %}
+    {% set station_alerts = [] %}
+    {% set general_alerts = [] %}
+    
+    {% for alert in alerts %}
+        {% if alert.stations and station in alert.stations %}
+            {% set _ = station_alerts.append(alert) %}
+        {% elif not alert.stations %}
+            {% set _ = general_alerts.append(alert) %}
+        {% endif %}
+    {% endfor %}
+    
+    {% set all_relevant_alerts = station_alerts + general_alerts %}
+    
+    {% if all_relevant_alerts %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle text-warning"></i> 
+                        Alertas para {{ station }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for alert in all_relevant_alerts[:3] %}
+                    <div class="alert 
+                        {% if alert.type == 'danger' %}alert-danger{% endif %}
+                        {% if alert.type == 'warning' %}alert-warning{% endif %}
+                        {% if alert.type == 'info' %}alert-info{% endif %} 
+                        {% if not loop.last %}mb-2{% else %}mb-0{% endif %}">
+                        
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="alert-heading mb-1">{{ alert.title }}</h6>
+                                <p class="mb-0">{{ alert.message }}</p>
+                            </div>
+                            <small class="text-muted ms-2">
+                                {{ alert.timestamp.strftime('%H:%M') }}
+                            </small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    {% if all_relevant_alerts|length > 3 %}
+                    <div class="text-center mt-2">
+                        <a href="{{ url_for('main.alertas') }}" class="btn btn-sm btn-outline-primary">
+                            Ver mais alertas
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
 </div>
 {% endblock %}
 
@@ -165,7 +225,5 @@
 setTimeout(function() {
     location.reload();
 }, 30000);
-
-// No additional scripts needed - preferences handled in base template
 </script>
 {% endblock %}

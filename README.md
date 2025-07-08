@@ -1,406 +1,217 @@
-# Sistema de Previsão de Chegada do Metrô
+# Sistema de Previsão do Metrô de Fortaleza
 
-Sistema web desenvolvido em Flask que permite consultar horários do metrô e prever tempos de chegada usando inteligência artificial.
+Sistema web modular para consulta de horários do metrô de Fortaleza com área administrativa para gerenciamento de alertas.
+
+## Estrutura do Projeto
+
+```
+adm-software/
+├── config.py               # Configurações centralizadas
+├── run_new.py              # Ponto de entrada da aplicação
+├── database.py             # Módulo de banco de dados legado
+├── ml_model.py             # Modelo de Machine Learning
+├── requirements.txt        # Dependências Python
+├── README.md              # Esta documentação
+│
+├── app/                   # Aplicação Flask modular
+│   ├── __init__.py       # Factory da aplicação
+│   ├── blueprints/       # Módulos organizados por funcionalidade
+│   │   ├── main.py      # Rotas públicas
+│   │   ├── api.py       # API REST
+│   │   └── admin.py     # Área administrativa
+│   ├── models/          # Modelos SQLAlchemy
+│   │   ├── alert.py     # Modelo de alertas
+│   │   └── user.py      # Modelo de usuários
+│   ├── forms/           # Formulários WTForms
+│   │   └── forms.py     # Formulários da aplicação
+│   └── utils/           # Utilitários
+│       └── timezone.py  # Funções de fuso horário
+│
+├── data/                  # Dados da aplicação
+│   ├── horarios_metro_ida.csv    # Horários sentido Carlito Benevides
+│   └── horarios_metro_volta.csv  # Horários sentido Chico da Silva
+│
+├── database/              # Bancos de dados
+│   ├── metro_database.db  # Banco principal (horários)
+│   └── metro_admin.db     # Banco administrativo (alertas/usuários)
+│
+├── models/               # Modelos de Machine Learning
+│   ├── metro_model.pkl   # Modelo treinado
+│   ├── scaler.pkl        # Normalizador de dados
+│   └── encoders.pkl      # Codificadores de categorias
+│
+├── templates/            # Templates HTML
+│   ├── admin/           # Templates administrativos
+│   │   ├── base.html    # Base administrativa
+│   │   ├── dashboard.html
+│   │   ├── alerts_list.html
+│   │   ├── alert_form.html
+│   │   └── login.html
+│   ├── base.html        # Base pública
+│   ├── index.html       # Página inicial
+│   ├── results.html     # Resultados de consulta
+│   ├── alerts.html      # Lista de alertas públicos
+│   └── docs.html        # Documentação da API
+│
+└── static/              # Arquivos estáticos (CSS, JS, imagens)
+```
+
+## Configuração Centralizada
+
+O arquivo `config.py` centraliza todas as configurações do projeto:
+
+- **Caminhos de dados**: CSVs de horários
+- **Caminhos de banco**: Bancos SQLite
+- **Caminhos de modelos**: Arquivos ML .pkl
+- **Configurações da aplicação**: Chaves secretas, debug, etc.
+- **Lista de estações**: Dados centralizados
 
 ## Funcionalidades
 
-- **Consulta de Horários**: Veja os próximos trens para qualquer estação
-- **Previsões IA**: Sistema de machine learning que aprende com dados reais
-- **Reports da Comunidade**: Usuários podem reportar horários reais
+### Área Pública
+- **Consulta de horários**: Previsão de chegada dos trens por estação
+- **Alertas em tempo real**: Informações sobre o status do serviço
 - **API REST**: Endpoints para integração com outros sistemas
-- **Interface Responsiva**: Funciona em desktop e mobile
-- **Aprendizado Incremental**: O modelo melhora automaticamente
+- **Interface responsiva**: Design adaptativo para dispositivos móveis
 
-## Tecnologias Utilizadas
+### Área Administrativa
+- **Gerenciamento de alertas**: Criação, edição e exclusão de alertas
+- **Dashboard**: Estatísticas e resumo do sistema
+- **Controle de acesso**: Sistema de autenticação seguro
+- **Interface intuitiva**: Painel administrativo moderno
 
-- **Backend**: Flask (Python)
-- **Banco de Dados**: SQLite
-- **Machine Learning**: TensorFlow
-- **Frontend**: Bootstrap 5, HTML5, CSS3, JavaScript
-- **Processamento de Dados**: Pandas, NumPy
-- **Formulários**: Flask-WTF, WTForms
+## Tecnologias
 
-## Pré-requisitos
+- **Backend**: Flask, SQLAlchemy, Flask-Login, Flask-WTF
+- **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
+- **Banco de dados**: SQLite
+- **ML**: Scikit-learn (modelo de previsão)
+- **Arquitetura**: Flask Blueprints (modular)
 
-- Python 3.8 ou superior
-- pip (gerenciador de pacotes Python)
+## Instalação
 
-## Instalação e Execução
+### Requisitos
+- Python 3.8+
+- pip
 
-### Opção 1: Execução com Docker (Recomendado)
+### Configuração
 
-#### Pré-requisitos
-
-- Docker instalado
-- Docker Compose instalado (opcional, mas recomendado)
-
-#### Usando Docker Compose (Mais Fácil)
-
+1. **Clone o projeto**:
 ```bash
-# Iniciar a aplicação
-docker-compose up -d --build
-
-# Ver logs
-docker-compose logs -f
-
-# Parar a aplicação
-docker-compose down
-```
-
-#### Usando Scripts de Gerenciamento
-
-**Windows (PowerShell):**
-
-```powershell
-# Iniciar
-.\docker.ps1 start
-
-# Ver logs
-.\docker.ps1 logs
-
-# Parar
-.\docker.ps1 stop
-
-# Ver status
-.\docker.ps1 status
-```
-
-**Linux/Mac (Bash):**
-
-```bash
-# Iniciar
-./docker.sh start
-
-# Ver logs
-./docker.sh logs
-
-# Parar
-./docker.sh stop
-```
-
-#### Usando Docker Diretamente
-
-```bash
-# Construir a imagem
-docker build -t metro-prediction-app .
-
-# Executar o container
-docker run -d \
-  --name metro-app \
-  -p 5000:5000 \
-  -v "$(pwd)/data:/app/data" \
-  metro-prediction-app
-```
-
-### Opção 2: Execução Local (Desenvolvimento)
-
-#### 1. Clone ou baixe o projeto
-
-```bash
-# Se usando git
-git clone <url-do-repositorio>
+git clone <repositorio>
 cd adm-software
-
-# Ou extraia os arquivos em uma pasta
 ```
 
-#### 2. Crie um ambiente virtual (recomendado)
-
+2. **Crie um ambiente virtual**:
 ```bash
 python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# Linux/Mac
-source venv/bin/activate
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
 ```
 
-#### 3. Instale as dependências
-
+3. **Instale as dependências**:
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 4. Execute a aplicação
-
+4. **Execute o servidor**:
 ```bash
-python app.py
+python run_new.py
 ```
 
-### Acesso à Aplicação
+## Acesso
 
-Após executar (Docker ou local), acesse:
+- **Site público**: http://localhost:5000
+- **Área administrativa**: http://localhost:5000/admin
+  - Usuário: `admin`
+  - Senha: `admin123`
+- **Documentação da API**: http://localhost:5000/docs
 
-- **URL Principal**: <http://localhost:5000>
-- **Documentação da API**: <http://localhost:5000/docs>
+## API
 
-## Estrutura dos Dados
+### Endpoints Principais
 
-O sistema utiliza os arquivos CSV fornecidos:
+- `GET /api/alertas` - Lista todos os alertas
+- `GET /api/horarios/<station>/<direction>` - Consulta horários
+- `POST /api/report` - Reporta horário real
 
-- `horarios_metro_ida.csv`: Horários programados no sentido Carlito Benevides
-- `horarios_metro_volta.csv`: Horários programados no sentido Chico da Silva
-
-### Estações Disponíveis
-
-1. Chico da Silva
-2. J.Alencar
-3. S.Benedito
-4. Benfica
-5. Pe.Cicero
-6. Porangabussu
-7. C.Fernandes
-8. J.kubitschek
-9. Parangaba
-10. V.Pery
-11. M.Satiro
-12. Mondubim
-13. Esperanca
-14. Aracape
-15. A.Alegre
-16. R.Queiroz
-17. V.Tavora
-18. Maracanaú
-19. Jereissati
-20. C. Benevides
-
-## Sistema de IA
-
-### Como Funciona
-
-1. **Dados Base**: Horários programados do Metrofor
-2. **Coleta de Dados**: Usuários reportam horários reais
-3. **Aprendizado**: Rede neural identifica padrões de atraso
-4. **Predição**: Sistema prevê horários mais precisos
-
-### Características do Modelo
-
-- **Arquitetura**: Rede neural densa com 3 camadas ocultas
-- **Features**: Estação, direção, hora, dia da semana, horário de pico
-- **Atualização**: Incremental com novos dados dos usuários
-- **Métricas**: Mean Squared Error para atrasos em minutos
-
-## API REST
-
-### Endpoints Disponíveis
-
-#### GET `/api/horarios/{station}/{direction}`
-
-Consulta próximos horários para uma estação
-
-**Exemplo:**
+### Exemplo de Uso
 
 ```bash
-GET /api/horarios/Parangaba/ida
-```
+# Consultar alertas
+curl http://localhost:5000/api/alertas
 
-**Resposta:**
-
-```json
-{
-  "status": "success",
-  "station": "Parangaba", 
-  "direction": "ida",
-  "trains": [
-    {
-      "scheduled": "14:30",
-      "predicted": "14:33", 
-      "delay_minutes": 3
-    }
-  ]
-}
-```
-
-#### POST `/api/report`
-
-Reporta horário real de chegada
-
-**Exemplo:**
-
-```bash
-POST /api/report
-Content-Type: application/json
-
-{
-  "station": "Parangaba",
-  "direction": "ida", 
-  "actual_time": "2025-06-28T14:33:00"
-}
-```
-
-### Documentação Completa
-
-Acesse `/docs` no navegador para ver a documentação completa da API.
-
-## Banco de Dados
-
-### Tabelas
-
-- `scheduled_times`: Horários programados (carregados dos CSVs)
-- `real_time_updates`: Reports dos usuários em tempo real
-
-### Arquivos Gerados
-
-- `metro_database.db`: Banco SQLite principal
-- `metro_model.h5`: Modelo de IA treinado
-- `scaler.pkl`: Normalizador de dados
-- `encoders.pkl`: Codificadores de categorias
-
-## Segurança
-
-### Medidas Implementadas
-
-- Validação de entradas contra SQL Injection
-- Proteção contra XSS (Cross-Site Scripting)
-- Sanitização de dados de formulários
-- Validação de tipos e formatos
-
-### Rate Limiting
-
-- Máximo de 100 requisições por minuto por IP
-- Reports limitados a horários de até 1 hora atrás
-
-## Interface Web
-
-### Páginas Principais
-
-- **Início** (`/`): Consulta de horários
-- **Resultados** (`/consultar`): Exibição de previsões
-- **Reportar** (`/reportar`): Formulário para reports
-- **API Docs** (`/docs`): Documentação técnica
-
-### Características
-
-- Design responsivo (Bootstrap 5)
-- Auto-refresh a cada 30 segundos na página de resultados
-- Feedback visual para ações do usuário
-- Interface intuitiva e acessível
-
-## Testes
-
-### Testar a Aplicação
-
-1. Inicie o servidor: `python app.py`
-2. Acesse `http://localhost:5000`
-3. Teste a consulta de horários
-4. Teste o report de horários reais
-5. Verifique a API em `/docs`
-
-### Testar API Diretamente
-
-```bash
 # Consultar horários
-curl "http://localhost:5000/api/horarios/Parangaba/ida"
-
-# Reportar horário
-curl -X POST "http://localhost:5000/api/report" \
-  -H "Content-Type: application/json" \
-  -d '{"station":"Parangaba","direction":"ida","actual_time":"2025-06-28T14:33:00"}'
+curl http://localhost:5000/api/horarios/Parangaba/ida
 ```
 
-## Deploy em Produção
+## Organização de Arquivos
 
-### Deploy com Docker (Recomendado)
+### Vantagens da Nova Estrutura
 
-O projeto inclui configuração completa do Docker para deploy em produção:
+1. **Separação clara**: Dados, modelos, bancos e código organizados
+2. **Manutenção facilitada**: Arquivos agrupados por função
+3. **Segurança**: .gitignore atualizado para proteger dados sensíveis
+4. **Escalabilidade**: Estrutura preparada para crescimento
+5. **Configuração centralizada**: Fácil alteração de caminhos e configurações
 
-#### Volumes e Persistência
+### Migrações Realizadas
 
-- `./data:/app/data` - Persistência dos dados do banco de dados
-- `./logs:/app/logs` - Logs da aplicação (opcional)
+- ✅ CSVs movidos para `data/`
+- ✅ Bancos SQLite movidos para `database/`
+- ✅ Modelos ML movidos para `models/`
+- ✅ Configurações centralizadas em `config.py`
+- ✅ Códigos atualizados para usar novos caminhos
+- ✅ .gitignore atualizado
 
-#### Variáveis de Ambiente
+## Desenvolvimento
 
-O container utiliza as seguintes variáveis:
+### Estrutura Modular
 
-- `FLASK_ENV=production`
-- `FLASK_APP=app.py`
-- `PYTHONDONTWRITEBYTECODE=1`
-- `PYTHONUNBUFFERED=1`
+O sistema utiliza Flask Blueprints para organização modular:
 
-#### Comandos Docker Úteis
+- **main**: Rotas públicas e interface principal
+- **api**: Endpoints da API REST
+- **admin**: Área administrativa
 
+### Banco de Dados
+
+O sistema utiliza SQLAlchemy com SQLite para persistência:
+
+- **alerts**: Tabela de alertas do sistema
+- **users**: Tabela de usuários administrativos
+
+### Modelo de ML
+
+Sistema de previsão usando scikit-learn para estimar tempo de chegada baseado em:
+- Horários programados
+- Histórico de atrasos
+- Condições atuais do sistema
+
+## Configuração de Produção
+
+Para ambiente de produção, configure:
+
+1. **Variáveis de ambiente**:
 ```bash
-# Ver containers em execução
-docker ps
-
-# Ver logs do container
-docker logs metro-app
-
-# Acessar terminal do container
-docker exec -it metro-app bash
-
-# Limpar imagens não utilizadas
-docker system prune -a
+export FLASK_ENV=production
+export SECRET_KEY=sua-chave-secreta-forte
 ```
 
-#### Troubleshooting Docker
-
-**Container não inicia:**
-
-1. Verifique os logs: `docker-compose logs`
-2. Verifique se a porta 5000 não está em uso
-3. Verifique se o Docker tem permissões adequadas
-
-**Dados não persistem:**
-
-1. Certifique-se que o diretório `./data` existe
-2. Verifique as permissões do diretório
-
-**Performance lenta:**
-
-1. Aloque mais recursos ao Docker
-2. Considere usar uma imagem base mais leve se necessário
-
-### Deploy Tradicional
-
-#### Considerações
-
-1. **Chave Secreta**: Altere `SECRET_KEY` no `app.py`
-2. **Banco de Dados**: Considere PostgreSQL para produção
-3. **Servidor Web**: Use Gunicorn + Nginx
-4. **Monitoramento**: Implemente logs e métricas
-5. **Backup**: Configure backup automático do banco
-
-### Exemplo com Gunicorn
-
+2. **Servidor WSGI** (recomendado: Gunicorn):
 ```bash
 pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
+gunicorn -w 4 -b 0.0.0.0:5000 "app:create_app()"
 ```
-
-## Melhorias Futuras
-
-- [ ] Notificações push para usuários
-- [ ] Dashboard administrativo  
-- [ ] Histórico de performance do modelo
-- [ ] Integração com APIs oficiais do Metrofor
-- [ ] App mobile nativo
-- [ ] Análise de padrões sazonais
-- [ ] Previsão de lotação dos trens
 
 ## Contribuição
 
-Para contribuir com o projeto:
-
-1. Reporte bugs ou problemas
-2. Sugira melhorias
-3. Contribua com dados reais de horários
-4. Ajude a testar novas funcionalidades
+1. Faça um fork do projeto
+2. Crie uma branch para sua funcionalidade
+3. Implemente as mudanças
+4. Adicione testes se necessário
+5. Faça um pull request
 
 ## Licença
 
-Este projeto foi desenvolvido como sistema de previsão para o Metrofor de Fortaleza-CE.
-
-## Suporte
-
-Para dúvidas ou problemas:
-
-- Verifique a documentação da API em `/docs`
-- Consulte este README
-- Teste com dados conhecidos primeiro
-
----
-
-**Desenvolvido para melhorar a experiência dos usuários do Metrô de Fortaleza**
+MIT License - veja o arquivo LICENSE para detalhes.

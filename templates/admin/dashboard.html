@@ -1,0 +1,224 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard - Admin Metrô{% endblock %}
+
+{% block content %}
+<!-- Estatísticas -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">
+                            Total de Alertas
+                        </div>
+                        <div class="h3 mb-0 font-weight-bold">{{ stats.total_alerts }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-bell fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card" style="background: linear-gradient(135deg, #198754 0%, #146c43 100%); color: white;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">
+                            Alertas Ativos
+                        </div>
+                        <div class="h3 mb-0 font-weight-bold">{{ stats.active_alerts }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card" style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%); color: white;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">
+                            Alta Prioridade
+                        </div>
+                        <div class="h3 mb-0 font-weight-bold">{{ stats.high_priority_alerts }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card" style="background: linear-gradient(135deg, #6c757d 0%, #545a60 100%); color: white;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-xs font-weight-bold text-uppercase mb-1">
+                            Inativos
+                        </div>
+                        <div class="h3 mb-0 font-weight-bold">{{ stats.inactive_alerts }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-times-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ações Rápidas -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Ações Rápidas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('admin.new_alert') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>Novo Alerta
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('admin.alerts_list') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-list me-2"></i>Ver Todos os Alertas
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('main.index') }}" target="_blank" class="btn btn-outline-success w-100">
+                            <i class="fas fa-external-link-alt me-2"></i>Ver Site
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('main.api_docs') }}" target="_blank" class="btn btn-outline-info w-100">
+                            <i class="fas fa-code me-2"></i>API Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas Recentes -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-clock me-2"></i>Alertas Recentes
+                </h5>
+                <a href="{{ url_for('admin.alerts_list') }}" class="btn btn-sm btn-outline-primary">
+                    Ver Todos
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_alerts %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Tipo</th>
+                                    <th>Prioridade</th>
+                                    <th>Status</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alert in recent_alerts %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if alert.type == 'danger' %}
+                                                <i class="fas fa-exclamation-circle text-danger me-2"></i>
+                                            {% elif alert.type == 'warning' %}
+                                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                            {% else %}
+                                                <i class="fas fa-info-circle text-info me-2"></i>
+                                            {% endif %}
+                                            {{ alert.title }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ alert.type }}">
+                                            {% if alert.type == 'danger' %}Crítico{% elif alert.type == 'warning' %}Aviso{% else %}Info{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'danger' if alert.priority == 'high' else 'warning' if alert.priority == 'medium' else 'secondary' }}">
+                                            {% if alert.priority == 'high' %}Alta{% elif alert.priority == 'medium' %}Média{% else %}Baixa{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if alert.active else 'secondary' }}">
+                                            {{ 'Ativo' if alert.active else 'Inativo' }}
+                                        </span>
+                                    </td>
+                                    <td>{{ alert.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ url_for('admin.edit_alert', id=alert.id) }}" class="btn btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="POST" action="{{ url_for('admin.toggle_alert', id=alert.id) }}" style="display: inline;">
+                                                <button type="submit" class="btn btn-outline-{{ 'warning' if alert.active else 'success' }}">
+                                                    <i class="fas fa-{{ 'pause' if alert.active else 'play' }}"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5>Nenhum alerta criado</h5>
+                        <p class="text-muted">Crie seu primeiro alerta para começar</p>
+                        <a href="{{ url_for('admin.new_alert') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Criar Alerta
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-atualizar estatísticas a cada 30 segundos
+setInterval(function() {
+    fetch('{{ url_for("admin.api_stats") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Atualizar os números nas cards
+                document.querySelector('.stat-card .h3').textContent = data.stats.total_alerts;
+                // Adicionar mais atualizações conforme necessário
+            }
+        })
+        .catch(error => console.error('Erro ao atualizar estatísticas:', error));
+}, 30000);
+</script>
+{% endblock %}

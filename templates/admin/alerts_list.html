@@ -1,0 +1,195 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Alertas - Admin Metrô{% endblock %}
+
+{% block page_title %}Gerenciar Alertas{% endblock %}
+
+{% block page_actions %}
+<a href="{{ url_for('admin.new_alert') }}" class="btn btn-primary">
+    <i class="fas fa-plus me-2"></i>Novo Alerta
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-list me-2"></i>Lista de Alertas
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if alerts.items %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Prioridade</th>
+                            <th>Estações</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alert in alerts.items %}
+                        <tr>
+                            <td>{{ alert.id }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if alert.type == 'danger' %}
+                                        <i class="fas fa-exclamation-circle text-danger me-2"></i>
+                                    {% elif alert.type == 'warning' %}
+                                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                    {% else %}
+                                        <i class="fas fa-info-circle text-info me-2"></i>
+                                    {% endif %}
+                                    <div>
+                                        <div class="fw-bold">{{ alert.title }}</div>
+                                        <small class="text-muted">{{ alert.message[:50] }}{% if alert.message|length > 50 %}...{% endif %}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ alert.type }}">
+                                    {% if alert.type == 'danger' %}Crítico{% elif alert.type == 'warning' %}Aviso{% else %}Info{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ 'danger' if alert.priority == 'high' else 'warning' if alert.priority == 'medium' else 'secondary' }}">
+                                    {% if alert.priority == 'high' %}Alta{% elif alert.priority == 'medium' %}Média{% else %}Baixa{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                {% if alert.stations %}
+                                    {% set stations_list = alert.stations|from_json %}
+                                    {% for station in stations_list[:2] %}
+                                        <span class="badge bg-secondary me-1">{{ station }}</span>
+                                    {% endfor %}
+                                    {% if stations_list|length > 2 %}
+                                        <span class="text-muted">+{{ stations_list|length - 2 }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">Todas</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if alert.active else 'secondary' }}">
+                                    {{ 'Ativo' if alert.active else 'Inativo' }}
+                                </span>
+                            </td>
+                            <td>
+                                <div>{{ alert.created_at.strftime('%d/%m/%Y') }}</div>
+                                <small class="text-muted">{{ alert.created_at.strftime('%H:%M') }}</small>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ url_for('admin.edit_alert', id=alert.id) }}" class="btn btn-outline-primary" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('admin.toggle_alert', id=alert.id) }}" style="display: inline;">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" class="btn btn-outline-{{ 'warning' if alert.active else 'success' }}" title="{{ 'Desativar' if alert.active else 'Ativar' }}">
+                                            <i class="fas fa-{{ 'pause' if alert.active else 'play' }}"></i>
+                                        </button>
+                                    </form>
+                                    <button type="button" class="btn btn-outline-danger" title="Deletar" 
+                                            data-alert-id="{{ alert.id }}" 
+                                            data-alert-title="{{ alert.title }}"
+                                            onclick="confirmDelete(this.dataset.alertId, this.dataset.alertTitle)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginação -->
+            {% if alerts.pages > 1 %}
+            <nav aria-label="Navegação dos alertas">
+                <ul class="pagination justify-content-center">
+                    {% if alerts.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin.alerts_list', page=alerts.prev_num) }}">Anterior</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page_num in alerts.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != alerts.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('admin.alerts_list', page=page_num) }}">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if alerts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin.alerts_list', page=alerts.next_num) }}">Próximo</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <h5>Nenhum alerta criado</h5>
+                <p class="text-muted">Crie seu primeiro alerta para começar</p>
+                <a href="{{ url_for('admin.new_alert') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Criar Alerta
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de confirmação de exclusão -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja deletar o alerta "<span id="alertTitle"></span>"?</p>
+                <p class="text-muted">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Deletar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function confirmDelete(alertId, alertTitle) {
+    document.getElementById('alertTitle').textContent = alertTitle;
+    document.getElementById('deleteForm').action = "{{ url_for('admin.delete_alert', id=0) }}".replace('0', alertId);
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

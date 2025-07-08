@@ -2,8 +2,9 @@ import sqlite3
 import pandas as pd
 from datetime import datetime
 import os
+from config import METRO_DATABASE, HORARIOS_IDA_CSV, HORARIOS_VOLTA_CSV
 
-DATABASE = "metro_database.db"
+DATABASE = METRO_DATABASE
 
 
 def get_db_connection():
@@ -56,8 +57,8 @@ def init_db():
 def load_csv_data(conn):
     """Carregar dados dos arquivos CSV"""
     # Carregar horários de ida
-    if os.path.exists("horarios_metro_ida.csv"):
-        df_ida = pd.read_csv("horarios_metro_ida.csv")
+    if os.path.exists(HORARIOS_IDA_CSV):
+        df_ida = pd.read_csv(HORARIOS_IDA_CSV)
         for _, row in df_ida.iterrows():
             horario = row["Horario"]
             for station in df_ida.columns[1:]:  # Pular a coluna 'Horario'
@@ -65,12 +66,12 @@ def load_csv_data(conn):
                 if pd.notna(time):  # Verificar se não é NaN
                     conn.execute(
                         "INSERT INTO scheduled_times (horario, station, time, direction) VALUES (?, ?, ?, ?)",
-                        (horario, station, time, "ida"),
+                        (horario, station, time, "Carlito Benevides"),
                     )
 
     # Carregar horários de volta
-    if os.path.exists("horarios_metro_volta.csv"):
-        df_volta = pd.read_csv("horarios_metro_volta.csv")
+    if os.path.exists(HORARIOS_VOLTA_CSV):
+        df_volta = pd.read_csv(HORARIOS_VOLTA_CSV)
         for _, row in df_volta.iterrows():
             horario = row["Horario"]
             for station in df_volta.columns[1:]:  # Pular a coluna 'Horario'
@@ -78,7 +79,7 @@ def load_csv_data(conn):
                 if pd.notna(time):  # Verificar se não é NaN
                     conn.execute(
                         "INSERT INTO scheduled_times (horario, station, time, direction) VALUES (?, ?, ?, ?)",
-                        (horario, station, time, "volta"),
+                        (horario, station, time, "Chico da Silva"),
                     )
 
 

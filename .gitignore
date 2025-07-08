@@ -1,17 +1,39 @@
+# Arquivos temporários
 **/tmp
 **/__pycache__
 **/venv
+*.tmp
+*.log
 
-# Python bytecode and cache files
+# Python bytecode e cache
 **/*.pyc
 **/*.pyo
+*.egg-info/
+dist/
+build/
 
-# Pickle files
-**/*.pkl
+# Arquivos de modelo ML
+models/*.pkl
 
-# # Data files
-# **/*.csv
+# Arquivos de dados (descomente se necessário)
+# data/*.csv
 
-# Database files
-**/*.db
+# Arquivos de banco de dados
+database/*.db
+instance/
+
+# Arquivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de backup
+*_legacy.py
+*_backup.py
+*_old.py
 

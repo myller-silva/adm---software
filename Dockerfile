@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Definir variáveis de ambiente
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV FLASK_APP=app.py
+ENV FLASK_APP=run_new.py
 ENV FLASK_ENV=production
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5000
@@ -33,7 +33,7 @@ COPY . .
 RUN mkdir -p /app/data
 
 # Definir permissões adequadas
-RUN chmod +x start.py run.py
+RUN chmod +x run_new.py
 
 # Expor a porta da aplicação
 EXPOSE 5000
@@ -43,7 +43,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:5000/ || exit 1
 
 # Script de inicialização que configura o banco e inicia a aplicação
-RUN echo '#!/bin/bash\nset -e\necho "Inicializando banco de dados..."\npython -c "from database import init_db; init_db()"\necho "Banco de dados inicializado com sucesso!"\necho "Iniciando aplicação Flask..."\nexec python app.py' > /app/start.sh && \
+RUN echo '#!/bin/bash\nset -e\necho "Inicializando banco de dados..."\npython -c "from database import init_db; init_db()"\necho "Banco de dados inicializado com sucesso!"\necho "Iniciando aplicação Flask..."\nexec python run_new.py' > /app/start.sh && \
     chmod +x /app/start.sh
 
 # Comando para executar a aplicação

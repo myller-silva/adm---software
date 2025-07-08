@@ -3,6 +3,67 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
+        <!-- Alertas da Metrofor -->
+        {% if alerts %}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> 
+                    Alertas da Metrofor
+                </h5>
+                <a href="{{ url_for('main.alertas') }}" class="btn btn-sm btn-outline-primary">
+                    Ver Todos <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                {% for alert in alerts %}
+                <div class="alert 
+                    {% if alert.type == 'danger' %}alert-danger{% endif %}
+                    {% if alert.type == 'warning' %}alert-warning{% endif %}
+                    {% if alert.type == 'info' %}alert-info{% endif %} 
+                    {% if not loop.last %}mb-2{% else %}mb-0{% endif %}">
+                    
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="alert-heading mb-1">
+                                {% if alert.type == 'danger' %}
+                                    <i class="fas fa-exclamation-circle"></i>
+                                {% elif alert.type == 'warning' %}
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle"></i>
+                                {% endif %}
+                                {{ alert.title }}
+                            </h6>
+                            <p class="mb-1">{{ alert.message }}</p>
+                            
+                            {% if alert.stations %}
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt"></i> 
+                                    {% for station in alert.stations %}
+                                        {{ station }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </small>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted ms-2">
+                            {{ alert.timestamp.strftime('%H:%M') }}
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                {% if alerts|length > 3 %}
+                <div class="text-center mt-2">
+                    <small class="text-muted">
+                        E mais {{ alerts|length - 3 }} alerta(s)...
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
         <div class="card">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
@@ -11,7 +72,7 @@
                     <p class="text-muted">Selecione a estação e direção para ver os próximos trens</p>
                 </div>
 
-                <form method="POST" action="{{ url_for('consultar_horarios') }}">
+                <form method="POST" action="{{ url_for('main.consultar_horarios') }}">
                     {{ form.hidden_tag() }}
                     
                     <div class="row">
@@ -106,6 +167,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
 {% endblock %}
