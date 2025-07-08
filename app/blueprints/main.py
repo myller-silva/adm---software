@@ -35,8 +35,14 @@ def consultar_horarios():
         station = form.station.data
         direction = form.direction.data
 
+        # Mapear valores do formulário para nomes das direções no banco
+        direction_mapping = {"ida": "Carlito Benevides", "volta": "Chico da Silva"}
+
+        # Converter direção do formulário para direção do banco
+        db_direction = direction_mapping.get(direction, direction)
+
         # Obter horários programados
-        scheduled_times = get_scheduled_times(station, direction)
+        scheduled_times = get_scheduled_times(station, db_direction)
         current_time = get_region_time().time()
         next_trains = []
 
@@ -101,11 +107,17 @@ def reportar_horario():
         direction = form.direction.data
         actual_time = form.actual_time.data
 
+        # Mapear valores do formulário para nomes das direções no banco
+        direction_mapping = {"ida": "Carlito Benevides", "volta": "Chico da Silva"}
+
+        # Converter direção do formulário para direção do banco
+        db_direction = direction_mapping.get(direction, direction)
+
         # Salvar no banco de dados
-        save_real_time_update(station, direction, actual_time)
+        save_real_time_update(station, db_direction, actual_time)
 
         # Atualizar modelo ML
-        predictor.update_model(station, direction, actual_time)
+        predictor.update_model(station, db_direction, actual_time)
 
         flash("Horário reportado com sucesso! Obrigado por contribuir.", "success")
         return redirect(url_for("main.reportar"))
