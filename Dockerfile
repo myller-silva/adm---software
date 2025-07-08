@@ -6,8 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=run_new.py
 ENV FLASK_ENV=production
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=5000
+ENV FLASK_DEBUG=False
+ENV PORT=5000
 
 # Criar diretório de trabalho
 WORKDIR /app
@@ -29,8 +29,12 @@ RUN pip install --no-cache-dir --upgrade pip==23.3.1 && \
 # Copiar todos os arquivos do projeto
 COPY . .
 
-# Criar diretório para dados persistentes
-RUN mkdir -p /app/data
+# Criar diretórios necessários
+RUN mkdir -p /app/data && \
+    mkdir -p /app/database && \
+    mkdir -p /app/models && \
+    mkdir -p /app/static && \
+    mkdir -p /app/templates
 
 # Definir permissões adequadas
 RUN chmod +x run_new.py
@@ -42,9 +46,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:5000/ || exit 1
 
-# Script de inicialização que configura o banco e inicia a aplicação
-RUN echo '#!/bin/bash\nset -e\necho "Inicializando banco de dados..."\npython -c "from database import init_db; init_db()"\necho "Banco de dados inicializado com sucesso!"\necho "Iniciando aplicação Flask..."\nexec python run_new.py' > /app/start.sh && \
-    chmod +x /app/start.sh
-
-# Comando para executar a aplicação
-CMD ["/app/start.sh"]
+# Comando para executar a aplicação diretamente
+CMD ["python", "run_new.py"]
