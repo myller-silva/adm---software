@@ -60,6 +60,13 @@ def create_app():
 
         db.create_all()
 
+        # Inicializar banco de dados de horários do metrô
+        try:
+            from database import init_db
+            init_db()
+        except Exception as e:
+            print(f"Erro ao inicializar banco de dados de horários: {e}")
+
         # Criar usuário admin padrão se não existir
         if not User.query.filter_by(username="admin").first():
             admin_user = User(username="admin", email="admin@metrofor.ce.gov.br")
