@@ -68,6 +68,8 @@ docker-compose.yml
 .env.test
 config.local.py
 
-# Banco de dados local (será criado no container)
-*.db
-data/
+# IMPORTANTE: NÃO ignorar arquivos críticos da aplicação:
+# - data/ (contém horarios_metro_ida.csv e horarios_metro_volta.csv)
+# - models/ (contém encoders.pkl, metro_model.pkl, scaler.pkl)
+# - database/ (contém metro_admin.db e metro_database.db)
+# Estes arquivos são necessários para o funcionamento da aplicação!

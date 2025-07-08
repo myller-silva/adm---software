@@ -50,7 +50,7 @@ def consultar_horarios():
             train_time = datetime.strptime(time_str, "%H:%M").time()
             if train_time > current_time:
                 predicted_time = predictor.predict_arrival_time(
-                    station, direction, time_str, get_region_time()
+                    station, db_direction, time_str, get_region_time()
                 )
                 next_trains.append(
                     {
