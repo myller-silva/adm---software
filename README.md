@@ -139,8 +139,8 @@ Após executar (Docker ou local), acesse:
 
 O sistema utiliza os arquivos CSV fornecidos:
 
-- `horarios_metro_ida.csv`: Horários programados no sentido ida
-- `horarios_metro_volta.csv`: Horários programados no sentido volta
+- `horarios_metro_ida.csv`: Horários programados no sentido Carlito Benevides
+- `horarios_metro_volta.csv`: Horários programados no sentido Chico da Silva
 
 ### Estações Disponíveis
 

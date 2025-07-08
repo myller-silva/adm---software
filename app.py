@@ -22,6 +22,7 @@ app.config["SECRET_KEY"] = "minha-chave-ultra-secreta"
 # Configuração do fuso horário de Fortaleza
 REGION_TIME_ZONE = pytz.timezone("America/Fortaleza")
 
+
 def get_region_time():
     """Retorna a hora atual no fuso horário da região"""
     return datetime.now(REGION_TIME_ZONE)
@@ -63,8 +64,8 @@ class StationForm(FlaskForm):
         "Estação", choices=[(s, s) for s in STATIONS], validators=[DataRequired()]
     )
     direction = SelectField(
-        "Direção",
-        choices=[("ida", "Ida"), ("volta", "Volta")],
+        "Sentido",
+        choices=[("ida", "Carlito Benevides"), ("volta", "Chico da Silva")],
         validators=[DataRequired()],
     )
     submit = SubmitField("Consultar Horários")
@@ -75,8 +76,8 @@ class RealTimeForm(FlaskForm):
         "Estação", choices=[(s, s) for s in STATIONS], validators=[DataRequired()]
     )
     direction = SelectField(
-        "Direção",
-        choices=[("ida", "Ida"), ("volta", "Volta")],
+        "Sentido",
+        choices=[("ida", "Carlito Benevides"), ("volta", "Chico da Silva")],
         validators=[DataRequired()],
     )
     actual_time = DateTimeField(
