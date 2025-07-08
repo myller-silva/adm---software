@@ -11,7 +11,7 @@ sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 )
 
-from database import get_scheduled_times, save_real_time_update
+from database import get_scheduled_times, save_real_time_update, get_schedule_info
 from ml_model import MetroPredictor
 
 main_bp = Blueprint("main", __name__)
@@ -130,6 +130,17 @@ def alertas():
     """Página com todos os alertas da Metrofor"""
     alerts = [alert.to_dict() for alert in Alert.get_active_alerts()]
     return render_template("alerts.html", alerts=alerts)
+
+
+@main_bp.route("/info-horarios")
+def info_horarios():
+    """Página com informações completas do banco de horários"""
+    try:
+        schedule_info = get_schedule_info()
+        return render_template("schedule_info.html", info=schedule_info)
+    except Exception as e:
+        flash(f"Erro ao obter informações: {str(e)}", "error")
+        return redirect(url_for("main.index"))
 
 
 @main_bp.route("/docs")

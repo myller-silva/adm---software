@@ -195,3 +195,71 @@ def get_delay_statistics(station, direction):
         return dict(result)
     else:
         return {"avg_delay": 0, "min_delay": 0, "max_delay": 0, "total_reports": 0}
+
+
+def get_schedule_info():
+    """Obter informações completas do banco de horários"""
+    conn = get_db_connection()
+
+    # Obter estatísticas gerais
+    cursor = conn.execute(
+        """
+        SELECT 
+            COUNT(DISTINCT station) as total_stations,
+            COUNT(DISTINCT direction) as total_directions,
+            COUNT(*) as total_schedules
+        FROM scheduled_times
+    """
+    )
+    general_stats = dict(cursor.fetchone())
+
+    # Obter lista de estações
+    cursor = conn.execute(
+        "SELECT DISTINCT station FROM scheduled_times ORDER BY station"
+    )
+    stations = [row["station"] for row in cursor.fetchall()]
+
+    # Obter lista de direções
+    cursor = conn.execute(
+        "SELECT DISTINCT direction FROM scheduled_times ORDER BY direction"
+    )
+    directions = [row["direction"] for row in cursor.fetchall()]
+
+    # Obter estatísticas por estação
+    cursor = conn.execute(
+        """
+        SELECT 
+            station,
+            COUNT(*) as total_times,
+            MIN(time) as first_time,
+            MAX(time) as last_time
+        FROM scheduled_times
+        GROUP BY station
+        ORDER BY station
+    """
+    )
+    station_stats = [dict(row) for row in cursor.fetchall()]
+
+    # Obter estatísticas de atualizações em tempo real
+    cursor = conn.execute(
+        """
+        SELECT 
+            COUNT(*) as total_updates,
+            AVG(delay_minutes) as avg_delay,
+            MIN(delay_minutes) as min_delay,
+            MAX(delay_minutes) as max_delay
+        FROM real_time_updates
+        WHERE created_at >= datetime('now', '-30 days')
+    """
+    )
+    realtime_stats = dict(cursor.fetchone())
+
+    conn.close()
+
+    return {
+        "general": general_stats,
+        "stations": stations,
+        "directions": directions,
+        "station_stats": station_stats,
+        "realtime_stats": realtime_stats,
+    }
