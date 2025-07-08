@@ -1,75 +1,75 @@
-# Ignorar arquivos desnecessários durante a construção da imagem Docker
+# # Ignorar arquivos desnecessários durante a construção da imagem Docker
 
-# Cache Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+# # Cache Python
+# __pycache__/
+# *.pyc
+# *.pyo
+# *.pyd
+# .Python
+# build/
+# develop-eggs/
+# dist/
+# downloads/
+# eggs/
+# .eggs/
+# lib/
+# lib64/
+# parts/
+# sdist/
+# var/
+# wheels/
+# *.egg-info/
+# .installed.cfg
+# *.egg
 
-# Ambientes virtuais
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+# # Ambientes virtuais
+# .env
+# .venv
+# env/
+# venv/
+# ENV/
+# env.bak/
+# venv.bak/
 
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# # IDEs
+# .vscode/
+# .idea/
+# *.swp
+# *.swo
+# *~
 
-# Logs
-*.log
-logs/
+# # Logs
+# *.log
+# logs/
 
-# Arquivos temporários
-tmp/
-temp/
-.tmp/
+# # Arquivos temporários
+# tmp/
+# temp/
+# .tmp/
 
-# Sistema operacional
-.DS_Store
-Thumbs.db
+# # Sistema operacional
+# .DS_Store
+# Thumbs.db
 
-# Git
-.git/
-.gitignore
+# # Git
+# .git/
+# .gitignore
 
-# Docker
-.dockerignore
-docker-compose.yml
+# # Docker
+# .dockerignore
+# docker-compose.yml
 
-# Documentação
-*.md
+# # Documentação
+# *.md
 
-# Arquivos de configuração locais
-.env.local
-.env.development
-.env.test
-config.local.py
+# # Arquivos de configuração locais
+# .env.local
+# .env.development
+# .env.test
+# config.local.py
 
-# IMPORTANTE: NÃO ignorar arquivos críticos da aplicação:
-# - data/ (contém horarios_metro_ida.csv e horarios_metro_volta.csv)
-# - models/ (contém encoders.pkl, metro_model.pkl, scaler.pkl)
-# - database/ (contém metro_admin.db e metro_database.db)
-# Estes arquivos são necessários para o funcionamento da aplicação!
+# # IMPORTANTE: NÃO ignorar arquivos críticos da aplicação:
+# # - data/ (contém horarios_metro_ida.csv e horarios_metro_volta.csv)
+# # - models/ (contém encoders.pkl, metro_model.pkl, scaler.pkl)
+# # - database/ (contém metro_admin.db e metro_database.db)
+# # Estes arquivos são necessários para o funcionamento da aplicação!
