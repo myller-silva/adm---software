@@ -19,8 +19,8 @@ models/*.pkl
 # data/*.csv
 
 # Arquivos de banco de dados
-database/*.db
-instance/
+# database/*.db
+# instance/
 
 # Arquivos de IDE
 .vscode/
